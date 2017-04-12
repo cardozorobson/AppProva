@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
 
 /**
  *
- * @author mrfantasy
+ * @author robsoncardozo
  */
 public class buttonsFrame extends javax.swing.JFrame {
 
