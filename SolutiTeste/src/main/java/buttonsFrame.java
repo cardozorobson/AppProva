@@ -3,8 +3,17 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 /*
@@ -95,13 +104,42 @@ public class buttonsFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   private void buttonSolicitarMouseClicked(java.awt.event.MouseEvent evt) {
-            HttpResponse<JsonNode> textHTTP = null;
+   private void buttonSolicitarMouseClicked(java.awt.event.MouseEvent evt) throws KeyManagementException, NoSuchAlgorithmException {
+            
+        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                @Override
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+                @Override
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }
+        };
+        
+         SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+ 
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+       
+       HttpResponse<JsonNode> textHTTP = null;
             
             try {
                 textHTTP = Unirest.get("https://api-prova.lab.ca.inf.br:9445/desafio")
                         .asJson();
                         textHTTP.getBody().getObject();
+                        
+                        
             } catch (UnirestException ex) {
                 Logger.getLogger(buttonsFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
