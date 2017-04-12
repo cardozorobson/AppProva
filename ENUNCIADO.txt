@@ -1,0 +1,27 @@
+
+Desenvolver uma aplicação Java Desktop de Desafio-Resposta que:
+Apresente uma tela de solicitação de desafio;
+deverá ser apresentado um botão para o usuário: "SOLICITAR DESAFIO"
+Ao clicar, deverá ser feito o envio de uma requisição GET para o serviço https://api-prova.lab.ca.inf.br:9445/desafio, que retornará a string de desafio:
+Exemplo de retorno: {"desafio":"f9cf9cfe5cf5fa5989586af8f2bdeef86e059a12"}
+A string de desafio deve ser apresentada na tela;
+Nessa tela, além da apresentação da string de desafio, deverá ser apresentado um botão: "ASSINAR DESAFIO E VALIDAR"
+Envie uma requisição POST para o serviço https://api-prova.lab.ca.inf.br:9445/desafio, enviando a assinatura PKCS7 em parâmetro "resposta", no formato JSON:
+Exemplo: {"resposta" : "-----BEGIN PKCS7-----\n....MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BB\n-----END PKCS7-----"}
+A string de desafio deve ser assinada com o certificado digital em anexo, utilizando o bounce castle;
+Apresente a mensagem de retorno do webservice:
+Exemplo: {"retorno":true,"message":"Assinatura v\u00e1lida!"}
+Requisitos:
+Utilize a biblioteca Bouncy Castle para assinatura digital;
+Utilize o Swing, para desenvolver a interface com o usuário;
+Utilize as mensagens de retorno;
+As mensagens trocadas são todas em formato JSON, inclusive o conteúdo do POST;
+
+Dicas:
+O Endpoint do desafio-resposta é: https://api-prova.lab.ca.inf.br:9445/desafio
+É necessário manter a sessão entre os dois serviços (desafio e resposta);
+Talvez seja necessário o tratamento de quebras de linha no conteúdo da assinatura, envio do JSON;
+Poderá ser utilizada qualquer biblioteca de comunicação HTTP;
+Preferencialmente, o projeto poderá utilizar dependências com Maven;
+O arquivo de certificado e chave privada segue em anexo, em formato PKCS12, extensão PFX;
+A senha do certificado é: 123456
